@@ -6,7 +6,7 @@ OBJ = $(SRC:.c=.o)
 LIBDIR = lib
 LIBNAME = libpermutation.a
 TESTDIR = test
-TEST_SRC = $(TESTDIR)/perm_tests.c
+TEST_SRC = $(TESTDIR)/permutation_tests.c
 TEST_RUN = $(TESTDIR)/run
 
 .PHONY: all clean test
