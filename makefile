@@ -12,10 +12,8 @@ TEST_RUN = $(TESTDIR)/run
 .PHONY: all clean test
 
 ifeq ($(OS),Windows_NT)
-    RM_WIN = powershell -Command "if (Test-Path '$1') { Remove-Item -Recurse -Force $1 }"
     EXE_EXT = .exe
 else
-    RM_WIN =
     EXE_EXT =
 endif
 
@@ -42,9 +40,9 @@ endif
 
 clean:
 ifeq ($(OS),Windows_NT)
-	$(RM_WIN) src/permutation.o
-	$(RM_WIN) lib
-	$(RM_WIN) test/run$(EXE_EXT)
+	powershell -Command "if (Test-Path 'src/permutation.o') { Remove-Item -Force 'src/permutation.o' }"
+	powershell -Command "if (Test-Path 'lib') { Remove-Item -Recurse -Force 'lib' }"
+	powershell -Command "if (Test-Path 'test/run.exe') { Remove-Item -Force 'test/run.exe' }"
 else
 	rm -rf src/permutation.o lib test/run
 endif
