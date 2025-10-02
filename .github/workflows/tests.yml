@@ -7,18 +7,18 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - run: sudo apt update && sudo apt install -y build-essential
+      - run: make clean all
+      - run: make test
 
-    - name: Install build tools
-      run: sudo apt update && sudo apt install -y build-essential
-
-    - name: Build library and tests
-      run: make clean all
-
-    - name: Run tests
-      run: make test
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: choco install mingw -y
+      - run: make clean all
+      - run: test\run.exe

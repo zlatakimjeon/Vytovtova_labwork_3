@@ -6,8 +6,16 @@ OBJ = $(SRC:.c=.o)
 LIBDIR = lib
 LIBNAME = libpermutation.a
 TESTDIR = test
-TEST_SRC = $(TESTDIR)/permutation_tests.c
+TEST_SRC = $(TESTDIR)/perm_tests.c
 TEST_RUN = $(TESTDIR)/run
+
+ifeq ($(OS),Windows_NT)
+    RM = del /Q /S
+    MKDIR = if not exist $(1) mkdir $(1)
+else
+    RM = rm -rf
+    MKDIR = mkdir -p $(1)
+endif
 
 .PHONY: all clean test
 
@@ -17,7 +25,7 @@ $(LIBDIR)/$(LIBNAME): $(OBJ) | $(LIBDIR)
 	ar rcs $@ $^
 
 $(LIBDIR):
-	mkdir -p $(LIBDIR)
+	$(call MKDIR,$@)
 
 src/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -29,4 +37,8 @@ test: all
 	./$(TEST_RUN)
 
 clean:
-	rm -rf src/*.o $(LIBDIR) $(TEST_RUN)
+ifeq ($(OS),Windows_NT)
+	$(RM) $(OBJ) $(LIBDIR)\* $(TEST_RUN)
+else
+	$(RM) $(OBJ) $(LIBDIR) $(TEST_RUN)
+endif
