@@ -6,20 +6,20 @@ OBJ = $(SRC:.c=.o)
 LIBDIR = lib
 LIBNAME = libpermutation.a
 TESTDIR = test
-TEST_SRC = $(TESTDIR)/permutation_tests.c
+TEST_SRC = $(TESTDIR)/perm_tests.c
 TEST_RUN = $(TESTDIR)/run
 
 .PHONY: all clean test
 
 ifeq ($(OS),Windows_NT)
-    RM = powershell -Command "Remove-Item -Recurse -Force"
+    RM_WIN = powershell -Command "if (Test-Path '$1') { Remove-Item -Recurse -Force $1 }"
     EXE_EXT = .exe
 else
-    RM = rm -rf
+    RM_WIN =
     EXE_EXT =
 endif
 
-all: $(LIBDIR)/$(LIBNAME) $(TEST_RUN) 
+all: $(LIBDIR)/$(LIBNAME) $(TEST_RUN)
 
 $(LIBDIR)/$(LIBNAME): $(OBJ) | $(LIBDIR)
 	ar rcs $@ $^
@@ -42,9 +42,9 @@ endif
 
 clean:
 ifeq ($(OS),Windows_NT)
-	$(RM) src\permutation.o
-	$(RM) lib\*
-	$(RM) test\run.exe
+	$(RM_WIN) src/permutation.o
+	$(RM_WIN) lib
+	$(RM_WIN) test/run$(EXE_EXT)
 else
-	$(RM) src/permutation.o lib test/run
+	rm -rf src/permutation.o lib test/run
 endif
