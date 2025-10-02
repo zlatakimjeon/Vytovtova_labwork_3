@@ -18,7 +18,7 @@ jobs:
       run: sudo apt update && sudo apt install -y build-essential
 
     - name: Build library and tests
-      run: make all
+      run: make clean all
 
     - name: Run tests
       run: make test
